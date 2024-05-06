@@ -95,6 +95,18 @@ def entry_page():
         return redirect(url_for('login'))
 
 
+@app.route('/sea')
+def sea():
+    # Add logic for new_page_1 here if needed
+    return render_template('sea.html')
+
+
+@app.route('/sun')
+def sun():
+    # Add logic for new_page_2 here if needed
+    return render_template('sun.html')
+
+
 @app.route('/logout')
 def logout():
     session.pop('user', None)

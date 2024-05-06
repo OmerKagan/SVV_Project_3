@@ -96,3 +96,34 @@ form button:hover {
 .logout-link:hover {
     color: #bd2130;
 }
+
+.return-link {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.return-link:hover {
+    background-color: #0056b3;
+}
+
+.newPageButton {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #28a745;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.newPageButton:hover {
+    background-color: #218838;
+}
