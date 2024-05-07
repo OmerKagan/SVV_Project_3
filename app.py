@@ -34,6 +34,8 @@ failed_login_attempts = {}
 blocked_emails = {}
 
 # Configure Google OAuth
+app.config['GOOGLE_ID'] = 'id'
+app.config['GOOGLE_SECRET'] = 'secret'
 oauth = OAuth(app)
 google = oauth.remote_app(
     'google',
