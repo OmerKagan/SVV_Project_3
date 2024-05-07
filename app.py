@@ -34,8 +34,9 @@ failed_login_attempts = {}
 blocked_emails = {}
 
 # Configure Google OAuth
-app.config['GOOGLE_ID'] = 'id'
-app.config['GOOGLE_SECRET'] = 'secret'
+'''
+!!!!!!!!!!!!!!!!!!! Add id and secret here !!!!!!!!!!!!!!!!!!!
+'''
 oauth = OAuth(app)
 google = oauth.remote_app(
     'google',
@@ -176,37 +177,6 @@ def authenticate_user(email, password):
         return True
     else:
         return False
-
-def get_nearest_sea(latitude, longitude):
-    url = f'https://maps.googleapis.com/maps/api/geocode/json?latlng={latitude},{longitude}&key={google_maps_api_key}'
-    response = requests.get(url)
-    data = response.json()
-
-    # Print the entire API response for inspection
-    print("Google Maps Geocoding API Response:")
-    print(data)
-
-    if response.status_code == 200:
-        print("status 200, first if")
-        if data['status'] == 'OK':
-            print("status ok, second if")
-            for result in data['results']:
-                for component in result['address_components']:
-                    print(component)
-                    if 'sea' in component['long_name'].lower():
-                        print("sea, third if")
-                        nearest_sea = component['long_name']
-                        sea_latitude = result['geometry']['location']['lat']
-                        sea_longitude = result['geometry']['location']['lng']
-                        return nearest_sea, sea_latitude, sea_longitude
-            # If no sea component found, return default values or handle appropriately
-            return None, None, None
-        else:
-            print(f"Geocoding request failed with status: {data['status']}")
-            return None, None, None
-    else:
-        print(f"Failed to retrieve data. Status code: {response.status_code}")
-        return None, None, None
 
 
 def find_nearest_sea(user_latitude, user_longitude):
