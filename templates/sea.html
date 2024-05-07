@@ -5,13 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Distance to the Nearest Sea</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendPositionToServer, handleLocationError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function sendPositionToServer(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            // Display location information on the webpage
+            var locationInfo = `Latitude: ${latitude}, Longitude: ${longitude}`;
+            document.getElementById("location-info").textContent = locationInfo;
+
+            fetch('/sea', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    latitude: latitude,
+                    longitude: longitude
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Parse response body as JSON
+                } else {
+                    throw new Error('Failed to retrieve data from the server.');
+                }
+            })
+            .then(data => {
+                // Update nearest sea and distance information on the webpage
+                document.getElementById("nearest_sea").textContent = data.nearest_sea;
+                document.getElementById("distance_to_sea").textContent = `${data.distance_to_sea} kilometers`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function handleLocationError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <h2>Distance to the Nearest Sea</h2>
-        <p>Here is your location: </p>
-        <p>Here is the nearest sea to you: </p>
-        <p>Here is your distance to it: </p>
+        <button class="location-button" onclick="getLocation()">Get My Location Automatically</button>
+        <p id="location-info"></p>
+        <p>Nearest Sea: <span id="nearest_sea"></span></p>
+        <p>Distance to the Nearest Sea: <span id="distance_to_sea"></span> </p>
         <a href="/entry-page" class="return-link">Return Back</a>
     </div>
 </body>

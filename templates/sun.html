@@ -5,12 +5,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Distance to the Sun's Core</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendPositionToServer, handleLocationError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function sendPositionToServer(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+
+            // Display location information on the webpage
+            var locationInfo = `Latitude: ${latitude}, Longitude: ${longitude}`;
+            document.getElementById("location-info").textContent = locationInfo;
+
+            fetch('/sun', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    latitude: latitude,
+                    longitude: longitude
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Parse response body as JSON
+                } else {
+                    throw new Error('Failed to retrieve data from the server.');
+                }
+            })
+            .then(data => {
+                // Update nearest sea and distance information on the webpage
+                document.getElementById("distance_to_sun").textContent = `${data.distance_to_sun} kilometers`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function handleLocationError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+
+        function submitManualLocation(event) {
+            event.preventDefault();
+
+            var latitudeInput = document.getElementById("latitude-input").value;
+            var longitudeInput = document.getElementById("longitude-input").value;
+
+            // Validate latitude and longitude inputs
+            if (latitudeInput && longitudeInput) {
+                var latitude = parseFloat(latitudeInput);
+                var longitude = parseFloat(longitudeInput);
+
+                // Display location information on the webpage
+                var locationInfo = `Latitude: ${latitude}, Longitude: ${longitude}`;
+                document.getElementById("location-info").textContent = locationInfo;
+
+                fetch('/sun', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        latitude: latitude,
+                        longitude: longitude
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json(); // Parse response body as JSON
+                    } else {
+                        throw new Error('Failed to retrieve data from the server.');
+                    }
+                })
+                .then(data => {
+                    // Update nearest sea and distance information on the webpage
+                    document.getElementById("distance_to_sun").textContent = `${data.distance_to_sun} kilometers`;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+            } else {
+                alert("Please enter valid latitude and longitude values.");
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <h2>Distance to the Sun's Core</h2>
-        <p>Here is your location: </p>
-        <p>Here is your distance to sun's core: </p>
+        <button class="location-button" onclick="getLocation()">Get My Location Automatically</button>
+        <p id="location-info"></p>
+        <p>Or enter your location manually:</p>
+        <form id="manual-location-form" onsubmit="submitManualLocation(event)">
+            <label for="latitude-input">Latitude:</label>
+            <input type="text" id="latitude-input" name="latitude" placeholder="Enter latitude">
+
+            <label for="longitude-input">Longitude:</label>
+            <input type="text" id="longitude-input" name="longitude" placeholder="Enter longitude">
+
+            <button type="submit">Submit</button>
+        </form>
+        <p>Distance to the sun's core: <span id="distance_to_sun"></span> </p>
         <a href="/entry-page" class="return-link">Return Back</a>
     </div>
 </body>

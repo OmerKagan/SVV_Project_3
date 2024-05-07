@@ -127,3 +127,33 @@ form button:hover {
 .newPageButton:hover {
     background-color: #218838;
 }
+
+.location-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.location-button:hover {
+    background-color: #0056b3;
+}
+
+#manual-location-form button[type="submit"] {
+    display: block;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#manual-location-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
