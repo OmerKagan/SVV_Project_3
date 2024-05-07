@@ -1,4 +1,4 @@
-# Software Verification & Validation Project 3: Software Verification & Validation Project 3: Introduction to Test Driven Development (TDD)
+# Software Verification & Validation Project 3: Introduction to Test Driven Development (TDD)
 ## Group Members
 - Mehmet Alper Çetin
 - Ömer Kağan Danacı
