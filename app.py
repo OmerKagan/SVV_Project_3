@@ -34,9 +34,8 @@ failed_login_attempts = {}
 blocked_emails = {}
 
 # Configure Google OAuth
-'''
-!!!!!!!!!!!!!!!!!!! Add id and secret here !!!!!!!!!!!!!!!!!!!
-'''
+app.config['GOOGLE_ID'] = '942550748965-626q4fdhqc983jit0pg1ij7381skoo01.apps.googleusercontent.com'
+app.config['GOOGLE_SECRET'] = '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'
 oauth = OAuth(app)
 google = oauth.remote_app(
     'google',
